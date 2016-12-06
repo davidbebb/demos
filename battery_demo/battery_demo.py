@@ -63,7 +63,8 @@ for i in range (0, num_k+1):
 		phase = 0
 	else:
 		phase = math.pi
-		for j in range(0, num_ky/2+1):
+		for j in range(-1, num_ky/2+1):
+			
 			potassium.add(Circle(V(x-k_amp, k_height/2 - j*k_wl+ball_offset*k_wl), rad=k_rad),'balls')
 			potassium.add(Circle(V(x+k_amp, k_height/2 - (0.5+j)*k_wl+ball_offset*k_wl), rad=k_rad), 'balls')
 			potassium.add(Hole(V(x-k_amp, k_height/2 - j*k_wl+ball_offset*k_wl), rad=k_rad/2, z1=-kb_depth, z0=-k_depth), 'Potassium')
@@ -88,7 +89,7 @@ for i in range (0, num_li+1):
 		phase = 0
 	else:
 		phase = math.pi
-		for j in range(0, num_liy/2+1):
+		for j in range(-1, num_liy/2+1):
 			lithium.add(Circle(V(x-li_amp, li_height/2 - j*li_wl+ball_offset*li_wl), rad=li_rad),'balls')
 			lithium.add(Circle(V(x+li_amp, li_height/2 - (0.5+j)*li_wl+ball_offset*li_wl), rad=li_rad),'balls')
 			lithium.add(Hole(V(x-li_amp, li_height/2 - j*li_wl+ball_offset*li_wl), rad=li_rad/2, z1=-lib_depth, z0=-li_depth))
