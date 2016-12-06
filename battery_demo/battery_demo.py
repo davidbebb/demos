@@ -4,15 +4,14 @@
 plane = camcam.add_plane(Plane('xy', cutter='1/8_endmill'))
 cutter = '1/8_endmill'
 
-
 # Overall size of board
-li_width = 280.0
-li_height = 480.0
+li_width = 480.0
+li_height = 280.0
 # wave amplitude
 li_amp = 64.0/2/2/math.sqrt(2)
 # wave wavelength
 li_wl = 64.0/math.sqrt(2)
-# depth to cut 
+# depth to cut
 li_depth = 8
 # radius of ball
 li_rad = 14.0/2
@@ -23,16 +22,16 @@ lib_depth = li_depth + 3
 
 # radius of ball
 k_rad=22.0/2
-# depth to cut 
+# depth to cut
 k_depth = 12
 # Overall size of board
-k_width = 500.0
-k_height =800.0
+k_height = 500.0
+k_width =800.0
 # wave amplitude
 k_amp = 102.0/2/2/math.sqrt(2)
 k_wl = 102.0/math.sqrt(2)
 # how much the sine waves should be offset
-k_off = (k_rad*2 - 8) /2 + 1 
+k_off = (k_rad*2 - 8) /2 + 1
 # depth to cut extra circle in middle of each joint
 kb_depth = k_depth - 4
 
@@ -64,14 +63,17 @@ for i in range (0, num_k+1):
 		phase = 0
 	else:
 		phase = math.pi
-		for j in range(-1, num_ky+1):
+		for j in range(0, num_ky/2+1):
 			potassium.add(Circle(V(x-k_amp, k_height/2 - j*k_wl+ball_offset*k_wl), rad=k_rad),'balls')
 			potassium.add(Circle(V(x+k_amp, k_height/2 - (0.5+j)*k_wl+ball_offset*k_wl), rad=k_rad), 'balls')
 			potassium.add(Hole(V(x-k_amp, k_height/2 - j*k_wl+ball_offset*k_wl), rad=k_rad/2, z1=-kb_depth, z0=-k_depth), 'Potassium')
 			potassium.add(Hole(V(x+k_amp, k_height/2 - (0.5+j)*k_wl+ball_offset*k_wl), z1=-kb_depth, rad=k_rad/2, z0=-k_depth), 'Potassium')
-	potassium.add(Lines(SineWave(V(x, k_height/2), V(x, -k_height/2), amplitude=k_amp, wavelength=k_wl, phase=phase, step=1), z1=-k_depth))
 
-	p = Lines(SineWave(V(x, k_height/2), V(x, -k_height/2), amplitude=k_amp, wavelength=k_wl, phase=phase, step=4.01), z1=-k_depth)
+	potassium.add(Lines(SineWave(V(x, k_height/2), V(x, -k_height/2), amplitude=k_amp, wavelength=k_wl, phase=phase, step=1), z1=-k_depth))
+	sine_wave = SineWave(V(x, k_height/2), V(x, -k_height/2), amplitude=k_amp, wavelength=k_wl, phase=phase, step=4.01)
+
+
+	p = Lines(sine_wave, z1=-k_depth)
 	p2 = copy.deepcopy(p)
 	p3 = copy.deepcopy(p)
 	potassium.add(p2.offset_path('left', k_off, {}))
@@ -86,15 +88,16 @@ for i in range (0, num_li+1):
 		phase = 0
 	else:
 		phase = math.pi
-		for j in range(-1, num_liy):
+		for j in range(0, num_liy/2+1):
 			lithium.add(Circle(V(x-li_amp, li_height/2 - j*li_wl+ball_offset*li_wl), rad=li_rad),'balls')
 			lithium.add(Circle(V(x+li_amp, li_height/2 - (0.5+j)*li_wl+ball_offset*li_wl), rad=li_rad),'balls')
 			lithium.add(Hole(V(x-li_amp, li_height/2 - j*li_wl+ball_offset*li_wl), rad=li_rad/2, z1=-lib_depth, z0=-li_depth))
 			lithium.add(Hole(V(x+li_amp, li_height/2 - (0.5+j)*li_wl+ball_offset*li_wl), z1=-lib_depth, rad=li_rad/2, z0=-li_depth))
-	#lithium.add(Lines(SineWave(V(x, li_height/2), V(x, -li_height/2), amplitude=li_amp, wavelength=li_wl, phase=phase, step=1), z1=-li_depth))
+
+	lithium.add(Lines(SineWave(V(x, li_height/2), V(x, -li_height/2), amplitude=li_amp, wavelength=li_wl, phase=phase, step=1), z1=-li_depth))
+
 	p = Lines(SineWave(V(x, li_height/2), V(x, -li_height/2), amplitude=li_amp, wavelength=li_wl, phase=phase, step=2), z1=-li_depth)
 	p2 = copy.deepcopy(p)
+
 	lithium.add(p.offset_path('left', li_off, {}))
 	lithium.add(p2.offset_path('right', li_off, {}))
-
-
